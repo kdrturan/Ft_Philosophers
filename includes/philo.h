@@ -3,6 +3,7 @@
 
 # define PHILO_COUNT_MAX 200
 # define PHILO_COUNT_MIN 1
+# define ARGUMENT_ERROR "Invalid input."
 
 # include <pthread.h>
 # include <stdio.h>
@@ -13,7 +14,6 @@
 
 typedef enum	e_error_code
 {
-	ARGUMENT_ERROR,
 	PHILO_COUNT_UNDERFLOW,
 	PHILO_COUNT_OVERFLOW,
 	INT_OVERFLOW
@@ -25,8 +25,9 @@ typedef struct	s_args
 	int	time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;
+	int	how_much_eat;
 	long start_time;
-	pthread_mutex_t forks[200];
+	pthread_mutex_t* forks;
     pthread_mutex_t print_mutex;
 }				t_args;
 
@@ -40,10 +41,15 @@ typedef struct	s_philo
 	pthread_t thread;
 }				t_philo;
 
-void	terminate_prog(char *msg, int exit_code);
-void	handle_error(size_t error_code);
-void	check_errors(int ac, char **av);
 long get_current_millis(void);
 long	ft_atoi(const char *str);
-
+void	take_forks(t_args *args,t_philo *philo, int left, int right);
+void	eat_sleep(t_args *args,t_philo *philo, int left, int right);
+int	check_died(t_args *args,t_philo *philo);
+t_philo* initalize_variable(void *data, int* left, int* right);
+t_args	set_args(int ac,char **av);
+void ft_usleep(long time);
+void print_action(t_philo *philo, const char *msg);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
+char*	check_arguments(int ac, char **av);
 #endif
