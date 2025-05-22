@@ -23,11 +23,13 @@ void*    philo_jobs(void *data)
     {
         print_action(philo, "is thinking");
         take_forks(args,philo,left,right);
-        flag = check_died(args,philo);
-        if (flag == 1)
-            break;
         eat_sleep(args,philo,left,right);
         if (philo->meals_eaten == args->how_much_eat)
+        break;
+        if (flag == 1)
+            break;
+        flag = check_died(args,philo);
+        if (flag == 1)
             break;
     }
     return philo;
