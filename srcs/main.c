@@ -4,7 +4,10 @@
 void print_action(t_philo *philo, const char *msg) 
 {
     pthread_mutex_lock(&philo->args->print_mutex);
-    printf("%lu %d %s\n", (get_current_millis() - philo->args->start_time), philo->id, msg);
+    if (philo->args->is_finished == 0)
+    {
+        printf("%lu %d %s\n", (get_current_millis() - philo->args->start_time), philo->id, msg);
+    }
     pthread_mutex_unlock(&philo->args->print_mutex);
 }
 
@@ -15,7 +18,7 @@ void*    philo_jobs(void *data)
     t_args *args;
     int left;
     int right;
-    int flag;
+
 
     philo = initalize_variable(data, &left, &right);
     args = philo->args;
@@ -25,19 +28,37 @@ void*    philo_jobs(void *data)
         take_forks(args,philo,left,right);
         eat_sleep(args,philo,left,right);
         if (philo->meals_eaten == args->how_much_eat)
-        break;
-        if (flag == 1)
-            break;
-        flag = check_died(args,philo);
-        if (flag == 1)
             break;
     }
     return philo;
 }
 
+void* monitor_philos(void *data)
+{
+	t_args *args = (t_args *)data;
+	int i;
+
+	while (1)
+	{
+		i = 0;
+
+		while (i < args->number_of_philosophers )
+		{    
+            if (args->is_finished)
+                return NULL;
+			if (check_died(args, &args->philos[i]))
+				return NULL;
+			i++;
+		}
+	}
+    return NULL;
+}
+
+
 
 void initalize(t_args *args, t_philo *philos)
 {
+    pthread_t monitor;
     int i;
 
     i = 0;
@@ -48,17 +69,19 @@ void initalize(t_args *args, t_philo *philos)
         philos[i].args = args;
         philos[i].meals_eaten = 0;
         philos[i].last_meal_time = get_current_millis();
+        philos[i].is_finished = 0;
         pthread_create(&philos[i].thread, NULL, philo_jobs, &philos[i]);
         i++;
     }
     i = 0;
+    pthread_create(&monitor, NULL, monitor_philos, args);
     while (i < args->number_of_philosophers)
     {
         pthread_join(philos[i].thread, NULL);
         i++;
     }
+    pthread_join(monitor,NULL);
 }
-
 
 int main(int ac, char **av)
 {
@@ -74,6 +97,8 @@ int main(int ac, char **av)
     }
     args = set_args(ac,av);
     philos = malloc(args.number_of_philosophers * sizeof(t_philo));
+    args.philos = philos;
     initalize(&args, philos);
+    free(args.forks);
     return (0);
 }

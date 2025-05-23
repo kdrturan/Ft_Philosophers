@@ -12,6 +12,7 @@ t_args	set_args(int ac,char **av)
     args.time_to_die = ft_atoi(av[2]);
     args.time_to_eat = ft_atoi(av[3]);
     args.time_to_sleep = ft_atoi(av[4]);
+	args.is_finished = 0;
 	if (ac == 6)
         args.how_much_eat = ft_atoi(av[5]);
     else
@@ -20,6 +21,7 @@ t_args	set_args(int ac,char **av)
 	}
 	args.forks = malloc(args.number_of_philosophers * sizeof(pthread_mutex_t));
 	pthread_mutex_init(&args.print_mutex, NULL);
+	pthread_mutex_init(&args.died_mutex, NULL);
     while (i < args.number_of_philosophers)
 	{
         pthread_mutex_init(&args.forks[i++], NULL);

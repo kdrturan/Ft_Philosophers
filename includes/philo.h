@@ -19,8 +19,12 @@ typedef enum	e_error_code
 	INT_OVERFLOW
 }				t_error_code;
 
+typedef struct	s_philo t_philo;
+
 typedef struct	s_args
 {
+	t_philo*	philos;
+	int	is_finished;
 	int	number_of_philosophers;
 	int	time_to_die;
 	int	time_to_eat;
@@ -29,6 +33,7 @@ typedef struct	s_args
 	long start_time;
 	pthread_mutex_t* forks;
     pthread_mutex_t print_mutex;
+	pthread_mutex_t died_mutex;
 }				t_args;
 
 
@@ -37,6 +42,7 @@ typedef struct	s_philo
 	int id;
     int meals_eaten;
     long last_meal_time;
+	int	is_finished;
 	t_args *args;
 	pthread_t thread;
 }				t_philo;
