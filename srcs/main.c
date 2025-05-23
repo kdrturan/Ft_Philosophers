@@ -27,6 +27,8 @@ void*    philo_jobs(void *data)
         print_action(philo, "is thinking");
         take_forks(args,philo,left,right);
         eat_sleep(args,philo,left,right);
+        if (args->is_finished)
+            break;
         if (philo->meals_eaten == args->how_much_eat)
             break;
     }

@@ -5,16 +5,16 @@ void	take_forks(t_args *args,t_philo *philo, int left, int right)
     if (philo->id % 2 == 0)
     {
         pthread_mutex_lock(&args->forks[right]);
-        print_action(philo, " has taken a fork");
+        print_action(philo, "has taken a fork");
         pthread_mutex_lock(&args->forks[left]);
-        print_action(philo, " has taken a fork");
+        print_action(philo, "has taken a fork");
     }
     else
     {
         pthread_mutex_lock(&args->forks[left]);
-        print_action(philo, " has taken a fork");
+        print_action(philo, "has taken a fork");
         pthread_mutex_lock(&args->forks[right]);
-        print_action(philo, " has taken a fork");
+        print_action(philo, "has taken a fork");
     }	
 }
 
