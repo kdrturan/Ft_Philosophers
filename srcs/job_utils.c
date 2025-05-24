@@ -6,7 +6,7 @@
 /*   By: abturan <abturan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 14:41:41 by abturan           #+#    #+#             */
-/*   Updated: 2025/05/24 15:37:22 by abturan          ###   ########.fr       */
+/*   Updated: 2025/05/24 16:29:10 by abturan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	eat_sleep(t_args *args, t_philo *philo)
 {
 	print_action(philo, "is eating");
 	ft_usleep(args->time_to_eat);
-	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
+	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_lock(&args->died_mutex);
 	philo->last_meal_time = get_current_millis();
 	if (args->how_much_eat != -1)
@@ -75,7 +75,7 @@ void	set_philos(t_args *args, t_philo *philos, int i)
 	philos[i].args = args;
 	philos[i].meals_eaten = 0;
 	philos[i].is_finished = 0;
-	if (i == args->number_of_philosophers)
+	if (i == args->number_of_philosophers - 1)
 	{
 		philos[i].l_fork = &args->forks[i];
 		philos[i].r_fork = &args->forks[0];
@@ -86,4 +86,19 @@ void	set_philos(t_args *args, t_philo *philos, int i)
 		philos[i].r_fork = &args->forks[i + 1];
 	}
 	philos[i].last_meal_time = get_current_millis();
+}
+
+void	*try_to_live_alone(void *data)
+{
+	t_philo	*philo;
+	t_args	*args;
+
+	philo = (t_philo *)data;
+	args = philo->args;
+	philo->id = 0;
+	philo->is_finished = 0;
+	print_action(philo, "take fork");
+	ft_usleep(philo->args->time_to_die);
+	print_action(philo, "died");
+	return (NULL);
 }

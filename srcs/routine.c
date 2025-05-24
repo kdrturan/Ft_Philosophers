@@ -6,7 +6,7 @@
 /*   By: abturan <abturan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 15:35:17 by abturan           #+#    #+#             */
-/*   Updated: 2025/05/24 15:39:02 by abturan          ###   ########.fr       */
+/*   Updated: 2025/05/24 16:30:38 by abturan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	*philo_jobs(void *data)
 
 	philo = (t_philo *)data;
 	args = philo->args;
+	if (philo->id % 2 == 1)
+		ft_usleep(10);
 	while (1)
 	{
 		flag = print_action(philo, "is thinking");
@@ -55,7 +57,7 @@ void	*monitor_philos(void *data)
 				return (NULL);
 			i++;
 		}
-		usleep(500);
+		usleep(100);
 	}
 	return (NULL);
 }
@@ -100,14 +102,10 @@ int	print_action(t_philo *philo, const char *msg)
 	}
 }
 
-void	try_to_live_alone(t_args *args, t_philo *philos)
+void	one_philo(t_args *args, t_philo *philos)
 {
-	pthread_t	monitor;
-
 	args->start_time = get_current_millis();
-	set_philos(args, philos, 0);
-	pthread_create(&philos[0].thread, NULL, philo_jobs, &philos[0]);
-	pthread_create(&monitor, NULL, monitor_philos, args);
+	philos->args = args;
+	pthread_create(&philos[0].thread, NULL, try_to_live_alone, &philos[0]);
 	pthread_join(philos[0].thread, NULL);
-	pthread_join(monitor, NULL);
 }
