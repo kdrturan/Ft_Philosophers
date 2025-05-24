@@ -44,13 +44,15 @@ typedef struct	s_philo
     long last_meal_time;
 	int	is_finished;
 	t_args *args;
+	pthread_mutex_t* r_fork;
+	pthread_mutex_t* l_fork;
 	pthread_t thread;
 }				t_philo;
 
 long get_current_millis(void);
 long	ft_atoi(const char *str);
-void	take_forks(t_args *args,t_philo *philo, int left, int right);
-void	eat_sleep(t_args *args,t_philo *philo, int left, int right);
+void	take_forks(t_philo *philo);
+void	eat_sleep(t_args *args,t_philo *philo);
 int	check_died(t_args *args,t_philo *philo);
 t_philo* initalize_variable(void *data, int* left, int* right);
 t_args	set_args(int ac,char **av);

@@ -1,34 +1,34 @@
 #include "philo.h"
 
-void	take_forks(t_args *args,t_philo *philo, int left, int right)
+void	take_forks(t_philo *philo)
 {
     if (philo->id % 2 == 0)
     {
-        pthread_mutex_lock(&args->forks[right]);
+        pthread_mutex_lock(philo->r_fork);
         print_action(philo, "has taken a fork");
-        pthread_mutex_lock(&args->forks[left]);
+        pthread_mutex_lock(philo->l_fork);
         print_action(philo, "has taken a fork");
     }
     else
     {
-        pthread_mutex_lock(&args->forks[left]);
+        pthread_mutex_lock(philo->l_fork);
         print_action(philo, "has taken a fork");
-        pthread_mutex_lock(&args->forks[right]);
+        pthread_mutex_lock(philo->r_fork);    
         print_action(philo, "has taken a fork");
     }	
 }
 
-void	eat_sleep(t_args *args,t_philo *philo, int left, int right)
+void	eat_sleep(t_args *args,t_philo *philo)
 {
     print_action(philo, "is eating");
     ft_usleep(args->time_to_eat);
+    pthread_mutex_unlock(philo->l_fork);
+    pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_lock(&args->died_mutex);
     philo->last_meal_time = get_current_millis();
 	pthread_mutex_unlock(&args->died_mutex);
     if (args->how_much_eat != -1)
 	philo->meals_eaten++;
-    pthread_mutex_unlock(&args->forks[left]);
-    pthread_mutex_unlock(&args->forks[right]);
     print_action(philo, "is sleeping");
     ft_usleep(args->time_to_sleep);
 }

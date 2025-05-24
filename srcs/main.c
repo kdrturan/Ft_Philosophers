@@ -25,8 +25,8 @@ void*    philo_jobs(void *data)
     while (1)
     {
         print_action(philo, "is thinking");
-        take_forks(args,philo,left,right);
-        eat_sleep(args,philo,left,right);
+        take_forks(philo);
+        eat_sleep(args,philo);
         if (args->is_finished)
             break;
         if (philo->meals_eaten == args->how_much_eat)
@@ -70,8 +70,18 @@ void initalize(t_args *args, t_philo *philos)
         philos[i].id = i;
         philos[i].args = args;
         philos[i].meals_eaten = 0;
-        philos[i].last_meal_time = get_current_millis();
         philos[i].is_finished = 0;
+        if (i == args->number_of_philosophers)
+        {
+            philos[i].l_fork = &args->forks[i];
+            philos[i].r_fork = &args->forks[0];
+        }
+        else
+        {
+            philos[i].l_fork = &args->forks[i];
+            philos[i].r_fork = &args->forks[i + 1];
+        }
+        philos[i].last_meal_time = get_current_millis();
         pthread_create(&philos[i].thread, NULL, philo_jobs, &philos[i]);
         i++;
     }
