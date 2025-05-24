@@ -1,12 +1,12 @@
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror -g
 
-SRC_FILES = $(wildcard srcs/*.c)
+SRC_FILES = srcs/check_errors.c srcs/job_utils.c srcs/main.c srcs/routine.c srcs/time.c srcs/utils.c
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
-OBJS = $(patsubst srcs/%.c, objs/%.o, $(SRC_FILES))
-INCLUDE = includes/*.h
+OBJS = objs/check_errors.o objs/job_utils.o objs/main.o objs/routine.o objs/time.o objs/utils.o
+INCLUDE = includes/philo.h
 
 all: $(NAME)
 

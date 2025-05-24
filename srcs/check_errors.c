@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   check_errors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abturan <abturan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/24 14:41:57 by abturan           #+#    #+#             */
-/*   Updated: 2025/05/24 14:47:01 by abturan          ###   ########.fr       */
+/*   Created: 2025/05/24 14:41:46 by abturan           #+#    #+#             */
+/*   Updated: 2025/05/24 15:48:41 by abturan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long	get_current_millis(void)
+int	ft_isdigit(int ch)
 {
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+	return (ch >= '0' && ch <= '9');
 }
 
-void	ft_usleep(long time)
+char	*check_arguments(int ac, char **av)
 {
-	long	start;
+	int	i;
 
-	start = get_current_millis();
-	while (get_current_millis() - start < time)
-		usleep(500);
+	if (ac != 5 && ac != 6)
+		return ("ARGUMENT ERROR-");
+	while (av[--ac] && ac > 0)
+	{
+		i = 0;
+		while (av[ac][i])
+			if (!ft_isdigit(av[ac][i++]))
+				return ("-ARGUMENT ERROR");
+	}
+	return ("");
 }
