@@ -32,5 +32,6 @@ int	main(int ac, char **av)
 		return (printf("Malloc Error."), 1);
 	initalize(&args, philos);
 	free(args.forks);
+	free(philos);
 	return (0);
 }

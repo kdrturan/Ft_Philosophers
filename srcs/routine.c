@@ -108,4 +108,6 @@ void	one_philo(t_args *args, t_philo *philos)
 	philos->args = args;
 	pthread_create(&philos[0].thread, NULL, try_to_live_alone, &philos[0]);
 	pthread_join(philos[0].thread, NULL);
+	free(args->forks);
+	free(philos);
 }
