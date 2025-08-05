@@ -26,6 +26,7 @@ make         # Builds ./philo
 make clean   # Deletes object files
 make fclean  # Deletes object files + binary
 make re      # Full rebuild
+---
 
 ✅ No external libraries are required except for pthread, which is linked automatically via the Makefile. The code is written in pure ANSI C, and any modern GCC or Clang compiler will work.
 
@@ -39,6 +40,7 @@ time_to_die	Time in ms a philosopher can go without eating before dying.
 time_to_eat	Time in ms a philosopher spends eating (forks held).
 time_to_sleep	Time in ms a philosopher spends sleeping.
 number_of_times_each_philosopher_must_eat (optional)	If provided, simulation ends when all philosophers eat this many times.
+---
 
 📌 Example
 bash
@@ -49,6 +51,8 @@ $ ./philo 5 310 200 100
 0 1 has taken a fork
 0 1 is eating
 ...
+---
+
 🧩 Algorithm Overview
 🔹 Initialization
 Parse and validate CLI arguments.
@@ -78,16 +82,15 @@ Destroy all mutexes and free allocated memory.
 
 🧠 Deadlock Avoidance
 This implementation prevents deadlocks by varying fork acquisition order between even and odd philosophers. The simulation respects the four necessary conditions for deadlock and intentionally breaks the circular wait condition.
+---
 
 🧪 Testing & Debugging
 Tool	Command	Purpose
 Valgrind	valgrind --leak-check=full ./philo …	Detects memory leaks and invalid accesses.
 AddressSanitizer	CFLAGS='-g -fsanitize=address' make re	Runtime checks for memory issues (fast, useful).
 strace/ltrace	strace -c ./philo …	Trace system calls and mutex/futex behavior.
+---
 
 📚 License
 This project is developed as part of the 42 Network curriculum. For academic purposes only.
-
-👤 Author
-Abdulkadir Turan
-🔗 github.com/kdrturan
+---
